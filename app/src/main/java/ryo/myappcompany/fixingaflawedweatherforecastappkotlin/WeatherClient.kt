@@ -5,11 +5,6 @@ import android.util.Log
 
 class WeatherClient(private var context: Context?) {
 
-    // 取得したデータを一時保存しておく用途のつもり
-    companion object {
-        var lastResponseCache: String = ""
-    }
-
     /**
      * 指定した都市コードの天気予報データを取得する
      */
@@ -28,7 +23,6 @@ class WeatherClient(private var context: Context?) {
             }
         """.trimIndent()
 
-        lastResponseCache = response
         return response
     }
 }
