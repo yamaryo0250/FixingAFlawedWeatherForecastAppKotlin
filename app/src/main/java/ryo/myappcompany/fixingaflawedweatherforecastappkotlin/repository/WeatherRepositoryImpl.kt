@@ -1,4 +1,29 @@
 package ryo.myappcompany.fixingaflawedweatherforecastappkotlin.repository
 
-class WeatherRepositoryImpl {
+import kotlinx.serialization.json.Json
+import ryo.myappcompany.fixingaflawedweatherforecastappkotlin.WeatherClient
+import ryo.myappcompany.fixingaflawedweatherforecastappkotlin.domain.WeatherInfo
+import ryo.myappcompany.fixingaflawedweatherforecastappkotlin.dto.WeatherResponseDto
+import ryo.myappcompany.fixingaflawedweatherforecastappkotlin.mapper.toDomain
+
+/**
+ * 天気情報リポジトリ 実ロジック
+ */
+class WeatherRepositoryImpl(
+    private val weatherClient: WeatherClient
+) : WeatherRepository {
+
+    /**
+     * 天気情報取得
+     *
+     * @param cityId 都市ID
+     *
+     * @return 天気情報
+     */
+    override suspend fun fetchWeatherData(cityId: String): WeatherInfo {
+        val weatherData = weatherClient.fetchWeatherData(cityId)
+        val weatherResponseDto = Json.decodeFromString<WeatherResponseDto>(weatherData)
+
+        return weatherResponseDto.toDomain()
+    }
 }
