@@ -4,23 +4,17 @@ import ryo.myappcompany.fixingaflawedweatherforecastappkotlin.domain.WeatherInfo
 import ryo.myappcompany.fixingaflawedweatherforecastappkotlin.dto.WeatherResponseDto
 
 /**
- * dtoとドメインクラスを変換するMapperクラス
+ * responseDto→ドメインクラスへの変換
+ *
+ * @return ドメインクラス(WeatherInfo)
  */
-class WeatherMapper {
+fun WeatherResponseDto.toDomain(): WeatherInfo {
+    val weatherItem = weather.firstOrNull()
 
-    /**
-     * responseDto→ドメインクラスへの変換
-     *
-     * @return ドメインクラス(WeatherInfo)
-     */
-    fun WeatherResponseDto.toDomain(): WeatherInfo {
-        val weatherItem = weather.firstOrNull()
-
-        return WeatherInfo(
-            weather = weatherItem?.main.orEmpty(),
-            description = weatherItem?.description.orEmpty(),
-            temperature = main.temp,
-            humidity = main.humidity
-        )
-    }
+    return WeatherInfo(
+        weather = weatherItem?.main.orEmpty(),
+        description = weatherItem?.description.orEmpty(),
+        temperature = main.temp,
+        humidity = main.humidity
+    )
 }
