@@ -1,74 +1,81 @@
 package ryo.myappcompany.fixingaflawedweatherforecastappkotlin;
 
+import static android.content.ContentValues.TAG;
+
+import android.annotation.SuppressLint;
 import android.os.Bundle;
-import android.view.View;
-import android.widget.Button;
-import android.widget.TextView;
+import android.util.Log;
+
 import androidx.appcompat.app.AppCompatActivity;
-
-import org.json.JSONArray;
-import org.json.JSONObject;
-
-import java.util.concurrent.Callable;
-import java.util.concurrent.FutureTask;
+import androidx.lifecycle.ViewModelProvider;
+import ryo.myappcompany.fixingaflawedweatherforecastappkotlin.databinding.ActivityWeatherBinding;
+import ryo.myappcompany.fixingaflawedweatherforecastappkotlin.ui.WeatherViewModel;
+import ryo.myappcompany.fixingaflawedweatherforecastappkotlin.ui.WeatherUiState;
 
 public class WeatherActivity extends AppCompatActivity {
 
-    private TextView tvResult;
-    private Button btnFetch;
-
-    private WeatherClient apiClient;
+    private ActivityWeatherBinding binding;
+    private WeatherViewModel viewModel;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_weather);
 
-        tvResult = findViewById(R.id.tv_result);
-        btnFetch = findViewById(R.id.btn_fetch);
+        binding = ActivityWeatherBinding.inflate(getLayoutInflater());
+        setContentView(binding.getRoot());
 
-        // APIクライアントの初期化
-        apiClient = new WeatherClient(this);
+        viewModel =
+                new ViewModelProvider(this, WeatherViewModel.Factory).get(WeatherViewModel.class);
 
-        btnFetch.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                // ローディング中であることをユーザーに知らせる意図のコード
-                tvResult.setText("天気データを取得中...");
+        observeViewModel();
 
-                // 非同期で通信処理を行うためにFutureTaskを利用
-                FutureTask<String> futureTask = new FutureTask<>(new Callable<String>() {
-                    @Override
-                    public String call() throws Exception {
-                        // "130010" は東京の都市コードの想定
-                        return apiClient.fetchWeatherData("130010");
-                    }
-                });
+        binding.btnFetch.setOnClickListener(view -> {
+            Log.d(TAG, "btnFetch clicked");
 
-                Thread thread = new Thread(futureTask);
-                thread.start();
+            viewModel.fetchWeatherData("130010");
+        });
+    }
 
-                try {
-                    // 通信結果を受け取る
-                    String jsonResponse = futureTask.get();
+    /**
+     * LiveData監視の登録
+     */
+    @SuppressLint("SetTextI18n")
+    private void observeViewModel() {
+        // 取得状況表示
+        viewModel.getWeatherUiState().observe(this, weatherUiState -> {
+            Log.d(TAG, "weatherUiState updating");
+            if (weatherUiState instanceof WeatherUiState.Loading) {
+                Log.d(TAG, "weatherUiState is Loading");
+                // 取得中表示
+                binding.tvResult.setText("天気データを取得中...");
 
-                    // 取得したJSON文字列のパース処理
-                    JSONObject jsonObject = new JSONObject(jsonResponse);
+                // ボタン連打制御
+                binding.btnFetch.setEnabled(false);
+                return;
+            }
 
-                    JSONArray weatherArray = jsonObject.getJSONArray("weather");
-                    JSONObject weatherObj = weatherArray.getJSONObject(0);
-                    String condition = weatherObj.getString("main");
+            binding.btnFetch.setEnabled(true);
 
-                    JSONObject mainObj = jsonObject.getJSONObject("main");
-                    double temp = mainObj.getDouble("temp");
+            if (weatherUiState instanceof WeatherUiState.Success) {
+                Log.d(TAG, "weatherUiState is Success");
+                // 取得成功表示
+                // 天気
+                String condition =
+                        ((WeatherUiState.Success) weatherUiState).getWeatherInfo().getWeather();
+                // 気温
+                double temp =
+                        ((WeatherUiState.Success) weatherUiState).getWeatherInfo().getTemperature();
 
-                    // 画面に結果を表示
-                    tvResult.setText("今日の天気: " + condition + "\n気温: " + temp + "度");
+                binding.tvResult.setText("今日の天気: " + condition + "\n気温: " + temp + "度");
+            } else if (weatherUiState instanceof WeatherUiState.Error) {
+                Log.d(TAG, "weatherUiState is Error");
+                // 取得失敗表示
+                binding.tvResult.setText("データの取得に失敗しました");
 
-                } catch (Exception e) {
-                    e.printStackTrace();
-                    tvResult.setText("データの取得に失敗しました");
-                }
+            } else {
+                Log.d(TAG, "weatherUiState is Default");
+                // 初期表示
+                binding.tvResult.setText("ここに天気情報が表示されます");
             }
         });
     }
