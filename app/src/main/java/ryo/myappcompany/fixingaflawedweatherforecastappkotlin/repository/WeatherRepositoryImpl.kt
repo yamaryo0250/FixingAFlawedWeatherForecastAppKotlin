@@ -1,5 +1,7 @@
 package ryo.myappcompany.fixingaflawedweatherforecastappkotlin.repository
 
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.withContext
 import kotlinx.serialization.json.Json
 import ryo.myappcompany.fixingaflawedweatherforecastappkotlin.WeatherClient
 import ryo.myappcompany.fixingaflawedweatherforecastappkotlin.domain.WeatherInfo
@@ -20,10 +22,10 @@ class WeatherRepositoryImpl(
      *
      * @return 天気情報
      */
-    override suspend fun fetchWeatherData(cityId: String): WeatherInfo {
+    override suspend fun fetchWeatherData(cityId: String): WeatherInfo = withContext(Dispatchers.IO) {
         val weatherData = weatherClient.fetchWeatherData(cityId)
         val weatherResponseDto = Json.decodeFromString<WeatherResponseDto>(weatherData)
 
-        return weatherResponseDto.toDomain()
+        weatherResponseDto.toDomain()
     }
 }
