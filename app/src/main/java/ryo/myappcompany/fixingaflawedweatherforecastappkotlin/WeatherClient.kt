@@ -1,11 +1,12 @@
 package ryo.myappcompany.fixingaflawedweatherforecastappkotlin
 
-import android.content.Context
 import android.util.Log
 import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.delay
 import kotlinx.coroutines.withContext
+import kotlin.time.Duration.Companion.milliseconds
 
-class WeatherClient(private var context: Context?) {
+class WeatherClient {
 
     /**
      * 指定した都市コードの天気予報データを取得する
@@ -17,7 +18,7 @@ class WeatherClient(private var context: Context?) {
         // クラッシュするため、ここでは重い同期通信処理をThread.sleepでシミュレートしています。
         withContext(Dispatchers.IO) {
             Log.d("WeatherClient", "Fetching wait...")
-            Thread.sleep(5000)
+            delay(5000.milliseconds)
         }
 
         // APIから返却された想定のJSON文字列
