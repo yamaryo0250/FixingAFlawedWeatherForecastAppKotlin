@@ -5,6 +5,6 @@ import ryo.myappcompany.fixingaflawedweatherforecastappkotlin.repository.Weather
 import ryo.myappcompany.fixingaflawedweatherforecastappkotlin.repository.WeatherRepositoryImpl
 
 class WeatherApplication : Application() {
-    val weatherClient: WeatherClient by lazy { WeatherClient(this) }
+    val weatherClient: WeatherClient by lazy { WeatherClient() }
     val weatherRepository: WeatherRepository by lazy { WeatherRepositoryImpl(weatherClient) }
 }
