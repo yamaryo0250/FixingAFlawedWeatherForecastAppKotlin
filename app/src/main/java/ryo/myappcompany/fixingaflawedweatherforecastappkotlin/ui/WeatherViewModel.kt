@@ -50,6 +50,7 @@ class WeatherViewModel(
 
         // 多重実行防止
         if (weatherUiState.value == WeatherUiState.Loading) {
+            Log.d(TAG, "FetchWeatherData cancel. Because already executed")
             return
         }
 
