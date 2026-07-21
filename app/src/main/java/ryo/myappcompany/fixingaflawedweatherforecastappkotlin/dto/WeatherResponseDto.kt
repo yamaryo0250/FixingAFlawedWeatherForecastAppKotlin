@@ -1,5 +1,6 @@
 package ryo.myappcompany.fixingaflawedweatherforecastappkotlin.dto
 
+import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
 
 /**
@@ -22,8 +23,8 @@ data class WeatherResponseDto(
  */
 @Serializable
 data class WeatherDto(
-    val main: String,
-    val description: String
+    @SerialName("main") val main: String,
+    @SerialName("description") val description: String
 )
 
 /**
