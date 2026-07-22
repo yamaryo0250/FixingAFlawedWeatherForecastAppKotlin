@@ -11,15 +11,12 @@ class WeatherClient {
     /**
      * 指定した都市コードの天気予報データを取得する
      */
-    suspend fun fetchWeatherData(cityId: String): String {
+    suspend fun fetchWeatherData(cityId: String): String = withContext(Dispatchers.IO) {
         Log.d("WeatherClient", "Fetching weather data for $cityId...")
 
         // 実際のネットワーク通信はメインスレッドで実行するとNetworkOnMainThreadExceptionで
         // クラッシュするため、ここでは重い同期通信処理をThread.sleepでシミュレートしています。
-        withContext(Dispatchers.IO) {
-            Log.d("WeatherClient", "Fetching wait...")
-            delay(5000.milliseconds)
-        }
+        delay(5000.milliseconds)
 
         // APIから返却された想定のJSON文字列
         val response = """
@@ -29,6 +26,6 @@ class WeatherClient {
             }
         """.trimIndent()
 
-        return response
+        return@withContext response
     }
 }

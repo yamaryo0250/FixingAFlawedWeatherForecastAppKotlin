@@ -22,10 +22,13 @@ class WeatherRepositoryImpl(
      *
      * @return 天気情報
      */
-    override suspend fun fetchWeatherData(cityId: String): WeatherInfo = withContext(Dispatchers.IO) {
+    override suspend fun fetchWeatherData(cityId: String): WeatherInfo {
         val weatherData = weatherClient.fetchWeatherData(cityId)
-        val weatherResponseDto = Json.decodeFromString<WeatherResponseDto>(weatherData)
 
-        weatherResponseDto.toDomain()
+        return withContext(Dispatchers.Default) {
+            val weatherResponseDto = Json.decodeFromString<WeatherResponseDto>(weatherData)
+
+            weatherResponseDto.toDomain()
+        }
     }
 }
