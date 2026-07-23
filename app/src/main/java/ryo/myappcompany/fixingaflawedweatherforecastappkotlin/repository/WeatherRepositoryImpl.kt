@@ -25,10 +25,20 @@ class WeatherRepositoryImpl(
     override suspend fun fetchWeatherData(cityId: String): WeatherInfo {
         val weatherData = weatherClient.fetchWeatherData(cityId)
 
-        return withContext(Dispatchers.Default) {
-            val weatherResponseDto = Json.decodeFromString<WeatherResponseDto>(weatherData)
+        return try {
+            withContext(Dispatchers.Default) {
+                val weatherResponseDto = Json.decodeFromString<WeatherResponseDto>(weatherData)
 
-            weatherResponseDto.toDomain()
+                weatherResponseDto.toDomain()
+            }
+        } catch (e: Exception) {
+            if (e is kotlinx.coroutines.CancellationException) {
+                throw e
+            }
+
+            throw DataFetchException("DataFetchException", e)
         }
     }
 }
+
+class DataFetchException(message: String, cause: Throwable? = null) : Exception(message, cause)
