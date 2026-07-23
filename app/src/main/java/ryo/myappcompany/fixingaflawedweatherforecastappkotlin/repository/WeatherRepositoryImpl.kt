@@ -37,9 +37,9 @@ class WeatherRepositoryImpl(
                 throw e
             }
 
-            throw DataFetchException("DataFetchException", e)
+            throw DataFetchException(e)
         }
     }
 }
 
-class DataFetchException(message: String, cause: Throwable? = null) : Exception(message, cause)
+class DataFetchException(cause: Throwable? = null) : Exception(cause)
