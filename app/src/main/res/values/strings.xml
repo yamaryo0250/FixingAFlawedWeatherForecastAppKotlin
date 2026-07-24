@@ -1,3 +1,8 @@
 <resources>
     <string name="app_name">FixingAFlawedWeatherForecastAppKotlin</string>
+<!--    アプリ内表示用-->
+    <string name="msg_fetching_weather">天気データを取得中…</string>
+    <string name="msg_weather_result">今日の天気: %1$s\n気温: %2$s度</string>
+    <string name="msg_fetch_failed">データの取得に失敗しました</string>
+    <string name="msg_default_weather">ここに天気情報が表示されます</string>
 </resources>

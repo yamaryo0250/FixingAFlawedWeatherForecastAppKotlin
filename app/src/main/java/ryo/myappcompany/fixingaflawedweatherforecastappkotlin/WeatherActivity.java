@@ -1,6 +1,5 @@
 package ryo.myappcompany.fixingaflawedweatherforecastappkotlin;
 
-import android.annotation.SuppressLint;
 import android.os.Bundle;
 import android.util.Log;
 
@@ -38,7 +37,6 @@ public class WeatherActivity extends AppCompatActivity {
     /**
      * LiveData監視の登録
      */
-    @SuppressLint("SetTextI18n")
     private void observeViewModel() {
         // 取得状況表示
         viewModel.getWeatherUiState().observe(this, weatherUiState -> {
@@ -46,7 +44,7 @@ public class WeatherActivity extends AppCompatActivity {
             if (weatherUiState instanceof WeatherUiState.Loading) {
                 Log.d(TAG, "weatherUiState is Loading");
                 // 取得中表示
-                binding.tvResult.setText("天気データを取得中...");
+                binding.tvResult.setText(getString(R.string.msg_fetching_weather));
 
                 // ボタン連打制御
                 binding.btnFetch.setEnabled(false);
@@ -65,16 +63,17 @@ public class WeatherActivity extends AppCompatActivity {
                 double temp =
                         ((WeatherUiState.Success) weatherUiState).getWeatherInfo().getTemperature();
 
-                binding.tvResult.setText("今日の天気: " + condition + "\n気温: " + temp + "度");
+                binding.tvResult.setText(
+                        getString(R.string.msg_weather_result, condition, String.valueOf(temp)));
             } else if (weatherUiState instanceof WeatherUiState.Error) {
                 Log.d(TAG, "weatherUiState is Error");
                 // 取得失敗表示
-                binding.tvResult.setText("データの取得に失敗しました");
+                binding.tvResult.setText(getString(R.string.msg_fetch_failed));
 
             } else {
                 Log.d(TAG, "weatherUiState is Default");
                 // 初期表示
-                binding.tvResult.setText("ここに天気情報が表示されます");
+                binding.tvResult.setText(getString(R.string.msg_default_weather));
             }
         });
     }
