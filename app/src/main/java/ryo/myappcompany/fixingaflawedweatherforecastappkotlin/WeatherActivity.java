@@ -55,13 +55,15 @@ public class WeatherActivity extends AppCompatActivity {
 
             if (weatherUiState instanceof WeatherUiState.Success) {
                 Log.d(TAG, "weatherUiState is Success");
+
+                WeatherUiState.Success successState = (WeatherUiState.Success) weatherUiState;
                 // 取得成功表示
                 // 天気
                 String condition =
-                        ((WeatherUiState.Success) weatherUiState).getWeatherInfo().getWeather();
+                        successState.getWeatherInfo().getWeather();
                 // 気温
                 double temp =
-                        ((WeatherUiState.Success) weatherUiState).getWeatherInfo().getTemperature();
+                        successState.getWeatherInfo().getTemperature();
 
                 binding.tvResult.setText(
                         getString(R.string.msg_weather_result, condition, String.valueOf(temp)));
