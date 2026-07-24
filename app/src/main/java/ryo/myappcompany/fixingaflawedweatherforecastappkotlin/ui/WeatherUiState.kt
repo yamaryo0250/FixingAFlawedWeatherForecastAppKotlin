@@ -10,12 +10,12 @@ sealed interface WeatherUiState {
     /**
      * 初期表示
      */
-    object Default : WeatherUiState
+    data object Default : WeatherUiState
 
     /**
      * 取得中
      */
-    object Loading : WeatherUiState
+    data object Loading : WeatherUiState
 
     /**
      * 取得成功
@@ -27,5 +27,5 @@ sealed interface WeatherUiState {
     /**
      * 取得失敗
      */
-    object Error : WeatherUiState
+    data object Error : WeatherUiState
 }
