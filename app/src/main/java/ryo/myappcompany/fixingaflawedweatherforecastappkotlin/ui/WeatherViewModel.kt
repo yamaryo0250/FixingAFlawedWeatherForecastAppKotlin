@@ -66,7 +66,7 @@ class WeatherViewModel(
                 throw e
             } catch (e: Exception) {
                 _weatherUiState.value = WeatherUiState.Error
-                throw e
+                Log.e(TAG, "Failed to fetch weather data", e)
             }
         }
     }
