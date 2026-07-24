@@ -1,6 +1,5 @@
 package ryo.myappcompany.fixingaflawedweatherforecastappkotlin.ui
 
-import android.content.ContentValues.TAG
 import android.util.Log
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
@@ -30,6 +29,7 @@ class WeatherViewModel(
         get() = _weatherUiState
 
     companion object {
+        private const val TAG = "WeatherViewModel"
         @JvmField
         val Factory: ViewModelProvider.Factory = viewModelFactory {
             initializer {

@@ -1,7 +1,5 @@
 package ryo.myappcompany.fixingaflawedweatherforecastappkotlin;
 
-import static android.content.ContentValues.TAG;
-
 import android.annotation.SuppressLint;
 import android.os.Bundle;
 import android.util.Log;
@@ -14,6 +12,7 @@ import ryo.myappcompany.fixingaflawedweatherforecastappkotlin.ui.WeatherUiState;
 
 public class WeatherActivity extends AppCompatActivity {
 
+    private static final String TAG = "WeatherActivity";
     private ActivityWeatherBinding binding;
     private WeatherViewModel viewModel;
 
