@@ -1,5 +1,6 @@
 package ryo.myappcompany.fixingaflawedweatherforecastappkotlin.repository
 
+import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
 import kotlinx.serialization.json.Json
@@ -12,7 +13,8 @@ import ryo.myappcompany.fixingaflawedweatherforecastappkotlin.mapper.toDomain
  * 天気情報リポジトリ 実ロジック
  */
 class WeatherRepositoryImpl(
-    private val weatherClient: WeatherClient
+    private val weatherClient: WeatherClient,
+    private val coroutineDispatcher: CoroutineDispatcher = Dispatchers.Default
 ) : WeatherRepository {
 
     /**
@@ -27,7 +29,7 @@ class WeatherRepositoryImpl(
         return try {
             val weatherData = weatherClient.fetchWeatherData(cityId)
 
-            withContext(Dispatchers.Default) {
+            withContext(coroutineDispatcher) {
                 val weatherResponseDto = Json.decodeFromString<WeatherResponseDto>(weatherData)
 
                 weatherResponseDto.toDomain()
