@@ -1,10 +1,9 @@
 package ryo.myappcompany.fixingaflawedweatherforecastappkotlin
 
 import android.app.Application
+import dagger.hilt.android.HiltAndroidApp
 import ryo.myappcompany.fixingaflawedweatherforecastappkotlin.repository.WeatherRepository
 import ryo.myappcompany.fixingaflawedweatherforecastappkotlin.repository.WeatherRepositoryImpl
 
-class WeatherApplication : Application() {
-    val weatherClient: WeatherClient by lazy { WeatherClient() }
-    val weatherRepository: WeatherRepository by lazy { WeatherRepositoryImpl(weatherClient) }
-}
+@HiltAndroidApp
+class WeatherApplication : Application()
