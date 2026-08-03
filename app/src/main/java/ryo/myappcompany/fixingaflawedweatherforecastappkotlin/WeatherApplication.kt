@@ -2,8 +2,6 @@ package ryo.myappcompany.fixingaflawedweatherforecastappkotlin
 
 import android.app.Application
 import dagger.hilt.android.HiltAndroidApp
-import ryo.myappcompany.fixingaflawedweatherforecastappkotlin.repository.WeatherRepository
-import ryo.myappcompany.fixingaflawedweatherforecastappkotlin.repository.WeatherRepositoryImpl
 
 @HiltAndroidApp
 class WeatherApplication : Application()
