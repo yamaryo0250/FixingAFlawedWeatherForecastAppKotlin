@@ -5,10 +5,13 @@ import android.util.Log;
 
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.lifecycle.ViewModelProvider;
+
+import dagger.hilt.android.AndroidEntryPoint;
 import ryo.myappcompany.fixingaflawedweatherforecastappkotlin.databinding.ActivityWeatherBinding;
 import ryo.myappcompany.fixingaflawedweatherforecastappkotlin.ui.WeatherViewModel;
 import ryo.myappcompany.fixingaflawedweatherforecastappkotlin.ui.WeatherUiState;
 
+@AndroidEntryPoint
 public class WeatherActivity extends AppCompatActivity {
 
     private static final String TAG = "WeatherActivity";
@@ -23,7 +26,7 @@ public class WeatherActivity extends AppCompatActivity {
         setContentView(binding.getRoot());
 
         viewModel =
-                new ViewModelProvider(this, WeatherViewModel.Factory).get(WeatherViewModel.class);
+                new ViewModelProvider(this).get(WeatherViewModel.class);
 
         observeViewModel();
 

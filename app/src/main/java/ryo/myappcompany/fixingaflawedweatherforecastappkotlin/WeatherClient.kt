@@ -4,9 +4,10 @@ import android.util.Log
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.withContext
+import javax.inject.Inject
 import kotlin.time.Duration.Companion.milliseconds
 
-class WeatherClient {
+class WeatherClient @Inject constructor() {
 
     /**
      * 指定した都市コードの天気予報データを取得する

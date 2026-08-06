@@ -4,22 +4,20 @@ import android.util.Log
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
-import androidx.lifecycle.ViewModelProvider
-import androidx.lifecycle.ViewModelProvider.AndroidViewModelFactory.Companion.APPLICATION_KEY
 import androidx.lifecycle.viewModelScope
-import androidx.lifecycle.viewmodel.initializer
-import androidx.lifecycle.viewmodel.viewModelFactory
+import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.CancellationException
 import kotlinx.coroutines.launch
-import ryo.myappcompany.fixingaflawedweatherforecastappkotlin.WeatherApplication
 import ryo.myappcompany.fixingaflawedweatherforecastappkotlin.repository.WeatherRepository
+import javax.inject.Inject
 
 /**
  * 天気情報を取得、状態保持するviewModel
  *
  * @param weatherRepository 天気情報リポジトリ(WeatherRepository)
  */
-class WeatherViewModel(
+@HiltViewModel
+class WeatherViewModel @Inject constructor(
     private val weatherRepository: WeatherRepository
 ) : ViewModel() {
 
@@ -30,13 +28,6 @@ class WeatherViewModel(
 
     companion object {
         private const val TAG = "WeatherViewModel"
-        @JvmField
-        val Factory: ViewModelProvider.Factory = viewModelFactory {
-            initializer {
-                val app = this[APPLICATION_KEY] as WeatherApplication
-                WeatherViewModel(app.weatherRepository)
-            }
-        }
     }
 
     /**

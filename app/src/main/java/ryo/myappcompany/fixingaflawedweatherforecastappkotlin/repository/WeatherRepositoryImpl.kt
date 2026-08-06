@@ -1,20 +1,21 @@
 package ryo.myappcompany.fixingaflawedweatherforecastappkotlin.repository
 
 import kotlinx.coroutines.CoroutineDispatcher
-import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
 import kotlinx.serialization.json.Json
 import ryo.myappcompany.fixingaflawedweatherforecastappkotlin.WeatherClient
+import ryo.myappcompany.fixingaflawedweatherforecastappkotlin.di.DefaultDispatcher
 import ryo.myappcompany.fixingaflawedweatherforecastappkotlin.domain.WeatherInfo
 import ryo.myappcompany.fixingaflawedweatherforecastappkotlin.dto.WeatherResponseDto
 import ryo.myappcompany.fixingaflawedweatherforecastappkotlin.mapper.toDomain
+import javax.inject.Inject
 
 /**
  * 天気情報リポジトリ 実ロジック
  */
-class WeatherRepositoryImpl(
+class WeatherRepositoryImpl @Inject constructor(
     private val weatherClient: WeatherClient,
-    private val coroutineDispatcher: CoroutineDispatcher = Dispatchers.Default
+    @param:DefaultDispatcher private val coroutineDispatcher: CoroutineDispatcher
 ) : WeatherRepository {
 
     /**
